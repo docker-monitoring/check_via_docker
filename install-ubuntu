@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [ "$EUID" -ne 0 ]
+  then echo "Installer must be run as root"
+  exit
+fi
+
+echo "Cleaning up old versions"
+apt-get remove -y docker docker-engine docker.io containerd runc
+
+echo "Installing installation-dependencies"
+apt-get install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+   
+echo "Adding docker GPG key"
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo "Add docker repo"
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update
+  
+echo "Installing docker"
+apt-get install -y docker-ce docker-ce-cli containerd.io 
+
+echo "Installing check_via_docker check-plugin"
+mkdir -p /usr/lib/nagios/plugins
+echo $'#!/bin/bash \n\ndocker run --rm $1 ${@:2}' > /usr/lib/nagios/plugins/check_via_docker 
+chmod +x /usr/lib/nagios/check_via_docker 
+
+echo "Done"
+exit 0
