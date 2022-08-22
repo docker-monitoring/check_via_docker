@@ -27,6 +27,7 @@ apt-get update
   
 echo "Installing docker"
 apt-get install -y docker-ce docker-ce-cli containerd.io 
+usermod -aG docker nagios
 
 echo "Installing check_via_docker check-plugin"
 mkdir -p /usr/lib/nagios/plugins
