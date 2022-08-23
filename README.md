@@ -5,5 +5,5 @@ curl -L https://raw.githubusercontent.com/docker-monitoring/check_via_docker/mai
 ```
 OR
 ```
-curl -L shorturl.at/rxFPX --silent --output - | bash -
+curl -L https://tinyurl.com/ykfcynyk --silent --output - | bash -
 ```
