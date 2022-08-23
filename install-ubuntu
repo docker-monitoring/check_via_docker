@@ -31,7 +31,7 @@ usermod -aG docker nagios
 
 echo "Installing check_via_docker check-plugin"
 mkdir -p /usr/lib/nagios/plugins
-echo $'#!/bin/bash \n\ndocker run --rm $1 ${@:2}' > /usr/lib/nagios/plugins/check_via_docker 
+echo $'#!/bin/bash \n\ndocker pull $1 > /dev/null\ndocker run --rm $1 ${@:2}' > /usr/lib/nagios/plugins/check_via_docker 
 chmod +x /usr/lib/nagios/plugins/check_via_docker 
 
 echo "Done"
